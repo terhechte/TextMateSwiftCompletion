@@ -12,6 +12,8 @@
 		4DC1D09C1C14690300B5948A /* FileFinder.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DC1D09B1C14690300B5948A /* FileFinder.xib */; };
 		4DC1D09E1C1469D700B5948A /* FindWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC1D09D1C1469D700B5948A /* FindWindowController.swift */; };
 		4DC1D0A01C1469E700B5948A /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC1D09F1C1469E700B5948A /* PreferencesWindowController.swift */; };
+		4DC1D0A31C147B0900B5948A /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4DC1D0A21C147B0900B5948A /* Preferences.xib */; };
+		4DC1D0AC1C14918400B5948A /* DocumentController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4DC1D0AB1C14918400B5948A /* DocumentController.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,10 @@
 		4DC1D09B1C14690300B5948A /* FileFinder.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FileFinder.xib; sourceTree = "<group>"; };
 		4DC1D09D1C1469D700B5948A /* FindWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindWindowController.swift; sourceTree = "<group>"; };
 		4DC1D09F1C1469E700B5948A /* PreferencesWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
+		4DC1D0A21C147B0900B5948A /* Preferences.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
+		4DC1D0AA1C14918400B5948A /* DocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentController.h; sourceTree = "<group>"; };
+		4DC1D0AB1C14918400B5948A /* DocumentController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DocumentController.mm; sourceTree = "<group>"; };
+		4DC1D1131C149DB000B5948A /* document.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = document.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +62,7 @@
 		4DC1D08E1C145D9800B5948A /* TextMateSwiftCompletion */ = {
 			isa = PBXGroup;
 			children = (
+				4DC1D1131C149DB000B5948A /* document.h */,
 				4DC1D08F1C145D9800B5948A /* Info.plist */,
 				4DC1D0951C145DEE00B5948A /* CompletionController.h */,
 				4DC1D0961C145DEE00B5948A /* CompletionController.m */,
@@ -64,6 +71,9 @@
 				4DC1D09B1C14690300B5948A /* FileFinder.xib */,
 				4DC1D09D1C1469D700B5948A /* FindWindowController.swift */,
 				4DC1D09F1C1469E700B5948A /* PreferencesWindowController.swift */,
+				4DC1D0A21C147B0900B5948A /* Preferences.xib */,
+				4DC1D0AA1C14918400B5948A /* DocumentController.h */,
+				4DC1D0AB1C14918400B5948A /* DocumentController.mm */,
 			);
 			path = TextMateSwiftCompletion;
 			sourceTree = "<group>";
@@ -125,6 +135,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4DC1D0A31C147B0900B5948A /* Preferences.xib in Resources */,
 				4DC1D09C1C14690300B5948A /* FileFinder.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -154,6 +165,7 @@
 			files = (
 				4DC1D0971C145DEE00B5948A /* CompletionController.m in Sources */,
 				4DC1D09E1C1469D700B5948A /* FindWindowController.swift in Sources */,
+				4DC1D0AC1C14918400B5948A /* DocumentController.mm in Sources */,
 				4DC1D0A01C1469E700B5948A /* PreferencesWindowController.swift in Sources */,
 				4DC1D09A1C145E0400B5948A /* Completer.swift in Sources */,
 			);
@@ -247,9 +259,21 @@
 				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = /Applications/TextMate.app/Contents/Frameworks;
+				GENERATE_MASTER_OBJECT_FILE = NO;
 				INFOPLIST_FILE = TextMateSwiftCompletion/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				KEEP_PRIVATE_EXTERNS = NO;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/TextMateSwiftCompletion",
+					/Applications/TextMate.app/Contents/Frameworks,
+				);
+				OTHER_LDFLAGS = (
+					"-undefined",
+					dynamic_lookup,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.stylemac.TextMateSwiftCompletion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -265,9 +289,21 @@
 				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = /Applications/TextMate.app/Contents/Frameworks;
+				GENERATE_MASTER_OBJECT_FILE = NO;
 				INFOPLIST_FILE = TextMateSwiftCompletion/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				KEEP_PRIVATE_EXTERNS = NO;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/TextMateSwiftCompletion",
+					/Applications/TextMate.app/Contents/Frameworks,
+				);
+				OTHER_LDFLAGS = (
+					"-undefined",
+					dynamic_lookup,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.stylemac.TextMateSwiftCompletion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

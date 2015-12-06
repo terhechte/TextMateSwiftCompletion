@@ -7,6 +7,7 @@
 //
 
 #import "CompletionController.h"
+#import "DocumentController.h"
 
 @interface CompletionController() {
     IBOutlet FindWindowController* _findWindowController;
@@ -41,10 +42,15 @@
     NSMenu *submenu = [[NSMenu alloc] initWithTitle:@"Swift Xcode Completion"];
     NSMenuItem *findItem = [[NSMenuItem alloc] initWithTitle:@"Open Project File" action:@selector(openXcodeFile:) keyEquivalent:@"o"];
     NSMenuItem *prefsItem = [[NSMenuItem alloc] initWithTitle:@"Swift Project Settings" action:@selector(openXcodeSettings:) keyEquivalent:@"x"];
+    NSMenuItem *triggerItem = [[NSMenuItem alloc] initWithTitle:@"Get Completions" action:@selector(completions:) keyEquivalent:@"y"];
+    
     prefsItem.target = self;
     findItem.target = self;
+    triggerItem.target = self;
+    
     [submenu addItem:findItem];
     [submenu addItem:prefsItem];
+    [submenu addItem:triggerItem];
     
     _showPluginMenuItem = [[NSMenuItem alloc] init];
     _showPluginMenuItem.title = @"Swift Completion";
@@ -81,7 +87,37 @@
 }
 
 - (void) openXcodeSettings:(id)sender {
+    if(!_prefsWindowController) {
+        _prefsWindowController = [[PreferencesWindowController alloc] initWithWindowNibName:@"Preferences"];
+        [self performSelector:@selector(openXcodeSettings:) withObject:sender afterDelay:0.01];
+        return;
+    }
+    NSWindow *mainWindow = [NSApp mainWindow];
+    [mainWindow beginSheet:_prefsWindowController.window
+         completionHandler:nil];
+}
+
+#pragma mark Completion Actions
+
+- (void) completions:(id)sender {
+    // call into the completion engine to retrieve completions,
+    // and start a textmate completion action
     
+    // Right now this doesn't work out because TextMate's documents are of c++ type
+    // document_t, and 
+    NSMutableArray *documents = @[].mutableCopy;
+    for (NSWindow *window in [NSApp windows]) {
+        //NSLog([NSString stringWithFormat:@"%@", window.delegate]);
+        NSString *className = [NSString stringWithFormat:@"%@", window.delegate];
+        if ([className containsString:@"DocumentController"]) {
+            [documents addObject:window.delegate];
+//            DocumentController *controller = (DocumentController*)window.delegate;
+//            NSLog(@"%@", controller.)
+            NSLog(@"%@", [(DocumentController*)window.delegate documentPath]);
+            NSLog(@"%@", [(DocumentController*)window.delegate documentView]);
+            NSLog(@"%@", currentDocumentPath((DocumentController*)window.delegate));
+        }
+    }
 }
 
 @end

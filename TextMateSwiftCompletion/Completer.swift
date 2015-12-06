@@ -23,6 +23,7 @@ enum CompletionError: ErrorType {
 enum Result {
     case Started
     case Stopped
+    case Running(Bool)
     case Files([String])
     case Completions([String])
     case Error(ErrorType)
@@ -48,10 +49,10 @@ protocol CompleterDebugDelegate {
  */
 class Completer {
     
-    let port = "44876"
+    let port: String
     
     let projectURL: NSURL
-    let task: NSTask
+    let task: NSTask?
     
     var debugDelegate: CompleterDebugDelegate? = nil
     
@@ -62,6 +63,7 @@ class Completer {
      */
     init(project: NSURL, completion: Completion) {
         self.projectURL = project
+        self.port = "44876"
         
         /// Find the SourceKittenDaemon Binary in our bundle
         let bundle = NSBundle.mainBundle()
@@ -74,12 +76,12 @@ class Completer {
         
         /// Start up the SourceKittenDaemon
         self.task = NSTask()
-        self.task.launchPath = daemonBinary
-        self.task.arguments = ["start", "--port", self.port, "--project", project.path!]
+        self.task?.launchPath = daemonBinary
+        self.task?.arguments = ["start", "--port", self.port, "--project", project.path!]
         
         /// Create an output pipe to read the sourcekittendaemon output
         let outputPipe = NSPipe()
-        self.task.standardOutput = outputPipe.fileHandleForWriting
+        self.task?.standardOutput = outputPipe.fileHandleForWriting
         
         /// Wait until the server started up properly
         /// Read the server output to figure out if startup succeeded.
@@ -98,7 +100,8 @@ class Completer {
                     !started {
                         started = true
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            self.debugDelegate?.startedCompleter(([daemonBinary] + self.task.arguments!).joinWithSeparator(" "))
+                            guard let task = self.task, arguments = task.arguments else { return }
+                            self.debugDelegate?.startedCompleter(([daemonBinary] + arguments).joinWithSeparator(" "))
                             completion(result: Result.Started)
                         })
                 }
@@ -112,7 +115,35 @@ class Completer {
             }
         }
         
-        self.task.launch()
+        self.task?.launch()
+    }
+    
+    
+    /**
+     Connect to an existing SourceKittenDaemon which may have been started somewhere else
+     */
+    init(port: String) {
+        self.port = port
+        self.projectURL = NSURL()
+        self.task = nil
+    }
+    
+    /**
+    Try whether the server is still running via a ping
+    */
+    func ping(completed: Completion) {
+        self.dataFromDaemon("/ping", headers: [:]) { (data) -> () in
+            do {
+                let result = try data() as? String
+                if result == "OK" {
+                    completed(result: Result.Running(true))
+                } else {
+                    completed(result: Result.Running(false))
+                }
+            } catch _ {
+                completed(result: Result.Running(false))
+            }
+        }
     }
     
     /**
@@ -120,7 +151,7 @@ class Completer {
      Xcode project is loaded */
     func stop(completed: Completion) {
         self.dataFromDaemon("/stop", headers: [:]) { (data) -> () in
-            self.task.terminate()
+            self.task?.terminate()
             completed(result: Result.Stopped)
         }
     }
