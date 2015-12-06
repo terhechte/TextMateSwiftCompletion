@@ -23,6 +23,8 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2015 Benedikt Terhechte. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
-	<string></string>
+	<string>CompletionController</string>
+	<key>TMPlugInAPIVersion</key>
+	<integer>2</integer>
 </dict>
 </plist>

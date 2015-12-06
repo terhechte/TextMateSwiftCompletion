@@ -6,9 +6,18 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4DC1D0971C145DEE00B5948A /* CompletionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DC1D0961C145DEE00B5948A /* CompletionController.m */; };
+		4DC1D09A1C145E0400B5948A /* Completer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC1D0991C145E0400B5948A /* Completer.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
-		4DC1D08C1C145D9800B5948A /* TextMateSwiftCompletion.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TextMateSwiftCompletion.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		4DC1D08C1C145D9800B5948A /* TextMateSwiftCompletion.tmplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TextMateSwiftCompletion.tmplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DC1D08F1C145D9800B5948A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4DC1D0951C145DEE00B5948A /* CompletionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompletionController.h; sourceTree = "<group>"; };
+		4DC1D0961C145DEE00B5948A /* CompletionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompletionController.m; sourceTree = "<group>"; };
+		4DC1D0981C145E0300B5948A /* TextMateSwiftCompletion-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TextMateSwiftCompletion-Bridging-Header.h"; sourceTree = "<group>"; };
+		4DC1D0991C145E0400B5948A /* Completer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Completer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,7 +42,7 @@
 		4DC1D08D1C145D9800B5948A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4DC1D08C1C145D9800B5948A /* TextMateSwiftCompletion.bundle */,
+				4DC1D08C1C145D9800B5948A /* TextMateSwiftCompletion.tmplugin */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -42,6 +51,10 @@
 			isa = PBXGroup;
 			children = (
 				4DC1D08F1C145D9800B5948A /* Info.plist */,
+				4DC1D0951C145DEE00B5948A /* CompletionController.h */,
+				4DC1D0961C145DEE00B5948A /* CompletionController.m */,
+				4DC1D0991C145E0400B5948A /* Completer.swift */,
+				4DC1D0981C145E0300B5948A /* TextMateSwiftCompletion-Bridging-Header.h */,
 			);
 			path = TextMateSwiftCompletion;
 			sourceTree = "<group>";
@@ -63,7 +76,7 @@
 			);
 			name = TextMateSwiftCompletion;
 			productName = TextMateSwiftCompletion;
-			productReference = 4DC1D08C1C145D9800B5948A /* TextMateSwiftCompletion.bundle */;
+			productReference = 4DC1D08C1C145D9800B5948A /* TextMateSwiftCompletion.tmplugin */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -112,6 +125,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4DC1D0971C145DEE00B5948A /* CompletionController.m in Sources */,
+				4DC1D09A1C145E0400B5948A /* Completer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,26 +215,35 @@
 		4DC1D0931C145D9800B5948A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = TextMateSwiftCompletion/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.stylemac.TextMateSwiftCompletion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				WRAPPER_EXTENSION = bundle;
+				SWIFT_OBJC_BRIDGING_HEADER = "TextMateSwiftCompletion/TextMateSwiftCompletion-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				WRAPPER_EXTENSION = tmplugin;
 			};
 			name = Debug;
 		};
 		4DC1D0941C145D9800B5948A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = TextMateSwiftCompletion/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.stylemac.TextMateSwiftCompletion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				WRAPPER_EXTENSION = bundle;
+				SWIFT_OBJC_BRIDGING_HEADER = "TextMateSwiftCompletion/TextMateSwiftCompletion-Bridging-Header.h";
+				WRAPPER_EXTENSION = tmplugin;
 			};
 			name = Release;
 		};
