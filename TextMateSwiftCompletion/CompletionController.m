@@ -7,9 +7,21 @@
 //
 
 #import "CompletionController.h"
-#import "TextMateSwiftCompletion-Swift.h"
+
+@interface CompletionController() {
+    IBOutlet FindWindowController* _findWindowController;
+    IBOutlet PreferencesWindowController* _prefsWindowController;
+    NSMenu* _windowMenu;
+    NSMenuItem* _showPluginMenuItem;
+}
+- (id)initWithPlugInController:(id <TMPlugInController>)aController;
+- (void)installMenuItem;
+- (void)uninstallMenuItem;
+@end
 
 @implementation CompletionController
+
+#pragma mark Initialization
 
 - (id)initWithPlugInController:(id <TMPlugInController>)aController {
     NSApp = [NSApplication sharedApplication];
@@ -20,35 +32,56 @@
 
 - (void)dealloc {
     [self uninstallMenuItem];
-    [self disposeAttempt];
 }
 
+#pragma mark Menu Handling
+
 - (void)installMenuItem {
-    NSLog([Completer test]);
-    if((windowMenu = [[[NSApp mainMenu] itemWithTitle:@"Window"] submenu]))
-    {
+    /// Create a submenu which contains the two actions we have
+    NSMenu *submenu = [[NSMenu alloc] initWithTitle:@"Swift Xcode Completion"];
+    NSMenuItem *findItem = [[NSMenuItem alloc] initWithTitle:@"Open Project File" action:@selector(openXcodeFile:) keyEquivalent:@"o"];
+    NSMenuItem *prefsItem = [[NSMenuItem alloc] initWithTitle:@"Swift Project Settings" action:@selector(openXcodeSettings:) keyEquivalent:@"x"];
+    prefsItem.target = self;
+    findItem.target = self;
+    [submenu addItem:findItem];
+    [submenu addItem:prefsItem];
+    
+    _showPluginMenuItem = [[NSMenuItem alloc] init];
+    _showPluginMenuItem.title = @"Swift Completion";
+    _showPluginMenuItem.submenu = submenu;
+    
+    if((_windowMenu = [[[NSApp mainMenu] itemWithTitle:@"Window"] submenu])) {
         unsigned index = 0;
-        NSArray* items = [windowMenu itemArray];
+        NSArray* items = [_windowMenu itemArray];
         for(int separators = 0; index != [items count] && separators != 2; index++)
             separators += [[items objectAtIndex:index] isSeparatorItem] ? 1 : 0;
         
-        showClockMenuItem = [[NSMenuItem alloc] initWithTitle:@"Attempt" action:@selector(showAttempt:) keyEquivalent:@""];
-        [showClockMenuItem setTarget:self];
-        [windowMenu insertItem:showClockMenuItem atIndex:index ? index-1 : 0];
+        [_windowMenu insertItem:_showPluginMenuItem atIndex:index ? index-1 : 0];
     }
 }
 
 - (void)uninstallMenuItem {
-    [windowMenu removeItem:showClockMenuItem];
-    showClockMenuItem = nil;
-    windowMenu = nil;
+    [_windowMenu removeItem:_showPluginMenuItem];
+    _showPluginMenuItem = nil;
+    _windowMenu = nil;
 }
 
-- (void)showAttempt:(id)sender {
-    NSLog(@"attempt");
+#pragma mark Plugin Actions
+
+- (void) openXcodeFile:(id)sender {
+    if (!_findWindowController) {
+        _findWindowController = [[FindWindowController alloc] initWithWindowNibName:@"FileFinder"];
+        [self performSelector:@selector(openXcodeFile:) withObject:sender afterDelay:0.01];
+        return;
+    }
+    
+    NSWindow *mainWindow = [NSApp mainWindow];
+    [mainWindow beginSheet:_findWindowController.window
+         completionHandler:nil];
 }
 
-- (void)disposeAttempt {
-    NSLog(@"dispose attempt");
+- (void) openXcodeSettings:(id)sender {
+    
 }
+
 @end

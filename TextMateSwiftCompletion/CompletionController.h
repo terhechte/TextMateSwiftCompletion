@@ -7,23 +7,11 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "TextMateSwiftCompletion-Swift.h"
 
 @protocol TMPlugInController
 - (float)version;
 @end
 
 @interface CompletionController : NSObject
-{
-    NSWindowController* clockWindowController;
-    NSMenu* windowMenu;
-    NSMenuItem* showClockMenuItem;
-}
-- (id)initWithPlugInController:(id <TMPlugInController>)aController;
-- (void)dealloc;
-
-- (void)installMenuItem;
-- (void)uninstallMenuItem;
-
-- (void)showClock:(id)sender;
-- (void)disposeClock;
 @end
