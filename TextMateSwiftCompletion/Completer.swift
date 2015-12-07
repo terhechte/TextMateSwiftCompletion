@@ -31,9 +31,25 @@ enum Result {
 
 typealias Completion = (result: Result) -> ()
 
-protocol CompleterDebugDelegate {
+public protocol CompleterDebugDelegate {
     func calledURL(url: NSURL, withHeaders headers: [String: String])
     func startedCompleter(command: String)
+}
+
+/**
+ Wrapper for Objective-C
+*/
+@objc public class CompleterWrapper: NSObject {
+    public static func completionsWrapper(completer: Completer, offset: Int, file: String, completion: (result: [String]?) -> ()) {
+        completer.calculateCompletions(NSURL(fileURLWithPath: file), offset: offset) { (result) -> () in
+            switch result {
+            case .Completions(let completions):
+                completion(result: completions)
+            default:
+                completion(result: nil)
+            }
+        }
+    }
 }
 
 /**
@@ -47,7 +63,7 @@ protocol CompleterDebugDelegate {
  This can be considered the main component for connecting to the SourceKittenDaemon
  completion engine.
  */
-class Completer {
+@objc public class Completer: NSObject {
     
     let port: String
     
@@ -86,6 +102,7 @@ class Completer {
         /// Wait until the server started up properly
         /// Read the server output to figure out if startup succeeded.
         var started = false
+        super.init()
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) { () -> Void in
             var content: String = ""
             while true {
@@ -140,7 +157,8 @@ class Completer {
                 } else {
                     completed(result: Result.Running(false))
                 }
-            } catch _ {
+            } catch let error {
+                print("error", error)
                 completed(result: Result.Running(false))
             }
         }
@@ -168,6 +186,17 @@ class Completer {
                 completion(result: Result.Error(error))
             }
         }
+    }
+    
+    // MARK: Convenience
+    
+    /**
+    Get a temporary file with contents
+    */
+    func temporaryFile(content: String) -> String {
+        let temporaryFileName = NSTemporaryDirectory() + "/" + NSProcessInfo.processInfo().globallyUniqueString + ".swift"
+        NSFileManager.defaultManager().createFileAtPath(temporaryFileName, contents: content.dataUsingEncoding(NSUTF8StringEncoding) , attributes: [:])
+        return temporaryFileName
     }
     
     /**
@@ -229,6 +258,14 @@ class Completer {
                     completion(data: { throw CompletionError.Error(message: "error: \(error.localizedDescription): \(error.userInfo)") })
                 })
                 return
+            }
+            
+            // ping requires an ok
+            if let data = data,
+                   dataString = String(data: data, encoding: NSUTF8StringEncoding)
+                where dataString == "OK" {
+                    completion(data: {return dataString})
+                    return
             }
             
             guard let data = data,

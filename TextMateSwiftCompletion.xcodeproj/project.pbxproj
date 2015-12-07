@@ -29,7 +29,6 @@
 		4DC1D0A21C147B0900B5948A /* Preferences.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 		4DC1D0AA1C14918400B5948A /* DocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentController.h; sourceTree = "<group>"; };
 		4DC1D0AB1C14918400B5948A /* DocumentController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DocumentController.mm; sourceTree = "<group>"; };
-		4DC1D1131C149DB000B5948A /* document.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = document.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +61,6 @@
 		4DC1D08E1C145D9800B5948A /* TextMateSwiftCompletion */ = {
 			isa = PBXGroup;
 			children = (
-				4DC1D1131C149DB000B5948A /* document.h */,
 				4DC1D08F1C145D9800B5948A /* Info.plist */,
 				4DC1D0951C145DEE00B5948A /* CompletionController.h */,
 				4DC1D0961C145DEE00B5948A /* CompletionController.m */,
@@ -268,12 +266,9 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/TextMateSwiftCompletion",
-					/Applications/TextMate.app/Contents/Frameworks,
+					"/Applications/TextMate.app/Contents/Frameworks/**",
 				);
-				OTHER_LDFLAGS = (
-					"-undefined",
-					dynamic_lookup,
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.stylemac.TextMateSwiftCompletion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -298,12 +293,9 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/TextMateSwiftCompletion",
-					/Applications/TextMate.app/Contents/Frameworks,
+					"/Applications/TextMate.app/Contents/Frameworks/**",
 				);
-				OTHER_LDFLAGS = (
-					"-undefined",
-					dynamic_lookup,
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.stylemac.TextMateSwiftCompletion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
