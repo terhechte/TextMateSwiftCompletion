@@ -16,7 +16,7 @@ This is still very basic, and more or less a proof-of-concept. I don't use TextM
 
 1. You'll need [SourceKittenDaemon](https://github.com/terhechte/SourceKittenDaemon) installed, so head over there and install the latest release.
 
-2. Download the TextMateSwiftCompletion.tmbundle, and double-click it, so that it can be installed in TextMate
+2. Download the [TextMateSwiftCompletion.tmbundle](https://github.com/terhechte/TextMateSwiftCompletion/releases/download/0.0.1/TextMateSwiftCompletion.tmplugin.zip), and double-click it, so that it can be installed in TextMate
 
 # Usage
 
