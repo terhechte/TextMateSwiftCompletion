@@ -9,9 +9,9 @@
 import Cocoa
 
 @objc class FindWindowTextField: NSTextField {
-    override func keyDown(theEvent: NSEvent) {
+    override func keyDown(with theEvent: NSEvent) {
         NSLog("key down", theEvent.keyCode)
-        super.keyDown(theEvent)
+        super.keyDown(with: theEvent)
     }
 }
 
@@ -20,7 +20,7 @@ import Cocoa
     @IBOutlet var filterTextField: NSTextField!
     var completer: Completer? = nil 
     
-    private var internalFilter: String = ""
+    fileprivate var internalFilter: String = ""
     
     override func awakeFromNib() {
         self.filterTextField.delegate = self
@@ -29,36 +29,36 @@ import Cocoa
         
     }
     
-    @IBAction func filterTextChanged(sender: AnyObject) {
+    @IBAction func filterTextChanged(_ sender: AnyObject) {
         self.internalFilter = self.filterTextField.stringValue
         
         // re-filter the table
     }
     
-    override func cancelOperation(sender: AnyObject?) {
+    override func cancelOperation(_ sender: Any?) {
         self.closeOperation()
     }
     
-    private func closeOperation() {
+    fileprivate func closeOperation() {
         guard let mainWindow = NSApp.mainWindow,
-            ourWindow = self.window
+            let ourWindow = self.window
         else { return }
         mainWindow.endSheet(ourWindow)
     }
 }
 
 extension FindWindowController: NSTextFieldDelegate {
-    func control(control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
+    func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
         self.closeOperation()
         return true
     }
     
-    func control(control: NSControl, textView: NSTextView, doCommandBySelector commandSelector: Selector) -> Bool {
-        if commandSelector == "moveUp:" {
+    func control(_ control: NSControl, textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
+        if commandSelector == #selector(NSResponder.moveUp(_:)) {
             self.filterTextField.stringValue = "arrow up"
             return true
         }
-        if commandSelector == "moveDown:" {
+        if commandSelector == #selector(NSResponder.moveDown(_:)) {
             self.filterTextField.stringValue = "arrow down"
             return true
         }

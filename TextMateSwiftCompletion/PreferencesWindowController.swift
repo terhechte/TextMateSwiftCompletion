@@ -9,7 +9,7 @@
 import Cocoa
 
 @objc protocol PreferencesChangeProtocol {
-    optional func successTestCompleterConnection(completer: Completer)
+    @objc optional func successTestCompleterConnection(_ completer: Completer)
 }
 
 @objc class PreferencesWindowController: NSWindowController {
@@ -17,18 +17,18 @@ import Cocoa
     @IBOutlet weak var portLabel: NSTextField!
     @IBOutlet weak var errorLabel: NSTextField!
     
-    var delegate: PreferencesChangeProtocol?
+    @objc var delegate: PreferencesChangeProtocol?
     
-    @IBAction func closeWindow(sender: AnyObject) {
+    @IBAction func closeWindow(_ sender: AnyObject) {
         guard let w = self.window else { return }
         NSApp.mainWindow?.endSheet(w)
     }
     
-    @IBAction func testConnection(sender: AnyObject) {
+    @IBAction func testConnection(_ sender: AnyObject) {
         let value = self.portLabel.stringValue
         
-        if value.characters.count <= 1 {
-            NSBeep()
+        if value.count <= 1 {
+            NSSound.beep()
             return
         }
         
@@ -37,16 +37,16 @@ import Cocoa
         let completer = Completer(port: value)
         completer.ping { (result) -> () in
             switch result {
-            case .Running(let r) where r == true:
-                NSUserDefaults.standardUserDefaults().setObject(value, forKey: "TextMateSwiftCompletionPort")
-                self.errorLabel.hidden = false
+            case .running(let r) where r == true:
+                UserDefaults.standard.set(value, forKey: "TextMateSwiftCompletionPort")
+                self.errorLabel.isHidden = false
                 self.errorLabel.stringValue = "Connected!"
                 if let delegate = self.delegate {
                     print("delegate", delegate)
                     delegate.successTestCompleterConnection?(completer)
                 }
             default:
-                self.errorLabel.hidden = false
+                self.errorLabel.isHidden = false
                 self.errorLabel.stringValue = "Could Not Connect!"
             }
         }
